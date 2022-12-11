@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>轮播图</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      /*1 轮播图容器*/
+      .slide {
+        width: 600px;
+        height: 400px;
+        margin: 100px auto;
+        position: relative;
+      }
+      /*1.1图片*/
+      .slide img {
+        width: 100%;
+        height: 100%;
+      }
+      /*1.2上一张*/
+      .slide .next,
+      .slide .prev {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        transform: translateY(-50%);
+        background-color: rgb(137, 212, 208);
+        top: 50%;
+        text-align: center;
+        border-radius: 50%;
+        color: white;
+        font-size: 26px;
+      }
+
+      .slide .prev {
+        left: 10px;
+      }
+
+      /*1.3下一张*/
+      .slide .next {
+        right: 10px;
+      }
+      /*1.4小圆点*/
+      .circles {
+        position: absolute;
+        bottom: 10px;
+        height: 16px;
+
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .circles span {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin: 0 10px;
+        background-color: white;
+        border-radius: 50%;
+      }
+      .circles .active {
+        background-color: brown;
+      }
+    </style>
+  </head>
+  <body>
+    <!--1.轮播图容器-->
+    <div class="slide">
+      <!--1.1图片-->
+      <img src="./img/1.jpg" />
+      <!--1.2上一张-->
+      <div class="prev"><</div>
+      <!--1.3下一张-->
+      <div class="next">></div>
+      <!--1.4小圆点-->
+      <div class="circles"></div>
+    </div>
+
+    <script>
+      //定义数组 保存所有图片的路线
+      let arr = ["./img/1.jpg", "./img/2.jpg", "./img/3.jpg", "./img/4.webp"];
+
+      //获取图片dom元素
+      let img = document.querySelector("img");
+
+      //获取轮播图容器
+      let slide = document.querySelector(".slide");
+
+      //获取小圆点容器
+      let circles = document.querySelector(".circles");
+
+      //获取上一张按钮
+      let prev = document.querySelector(".prev");
+
+      //获取下一张按钮
+      let next = document.querySelector(".next");
+
+      //定义变量 保存默认显示的图片下标
+      let index = 0;
+
+      //保存定时器标识
+      let timeId;
+
+      //轮播间隔时间
+      let time = 1000;
+
+      //开启定时器 更换图片
+      readInterval();
+
+      //渲染小圆点
+      render();
+
+      //给slide添加鼠标移入和移除事件
+      slide.addEventListener("mouseover", function () {
+        clearInterval(timeId);
+      });
+
+      slide.addEventListener("mouseout", function () {
+        //定时器恢复
+        readInterval();
+      });
+
+      //给上一张和下一张绑定点击事件
+      prev.addEventListener("click", function () {
+        //更改下标
+        index = --index == -1 ? arr.length - 1 : index;
+        //显示图片
+        img.src = arr[index];
+        //渲染小圆点
+        render();
+      });
+
+      next.addEventListener("click", function () {
+        //更改下标
+        index = ++index == arr.length ? 0 : index;
+        //显示图片
+        img.src = arr[index];
+        //渲染小圆点
+        render();
+      });
+
+      //封装定时器开始轮播图片函数
+      function readInterval() {
+        timeId = setInterval(function () {
+          //更改下标
+          index = ++index == arr.length ? 0 : index;
+          //每隔一秒钟更换下一张图片
+          img.src = arr[index];
+          //渲染小圆点
+          render();
+        }, time);
+      }
+
+      //封装小圆点渲染函数
+      function render() {
+        //渲染小圆点
+        circles.innerHTML = arr
+          .map(function (item, i) {
+            return `<span class=${index == i ? "active" : ""}></span>`;
+          })
+          .join("");
+      }
+    </script>
+  </body>
+</html>

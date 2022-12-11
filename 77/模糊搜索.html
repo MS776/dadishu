@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./citise.js"></script>
+  </head>
+  <body>
+    <form>
+      <input type="text" id="searchInput" placeholder="City or State" />
+      <ul id="suggestions"></ul>
+    </form>
+    <script>
+      searchInput.addEventListener("input", function () {
+        suggestions.innerHTML = cities
+          .filter((item) => item.city.includes(this.value))
+          .map((r) => {
+            return `
+        <li>
+          <span>${r.city}</span>
+          <span>${r.population}</span>
+        </li>
+            `;
+          })
+          .join("");
+      });
+    </script>
+  </body>
+</html>
