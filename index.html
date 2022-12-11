@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./打地鼠.css" />
+  </head>
+  <body>
+    <h1>打地鼠 得分<span class="score" id="score">0</span></h1>
+    <h3 id="dengji">当前难度等级：</h3>
+    <h3 id="gongXi"></h3>
+    <div style="height: 36px">
+      <button class="button" onClick="startGame()">开始游戏</button>
+    </div>
+    <div>
+      <button class="button" onClick="gameSpeed1()">难度等级：简单的</button>
+      <button class="button" onClick="gameSpeed2()">难度等级：还可以</button>
+      <button class="button" onClick="gameSpeed3()">难度等级：地狱级</button>
+    </div>
+    <div class="game" id="game">
+      <div class="hole" id="hole1">
+        <div class="mole" id="0"></div>
+      </div>
+      <div class="hole" id="hole2">
+        <div class="mole"></div>
+      </div>
+      <div class="hole" id="hole3">
+        <div class="mole"></div>
+      </div>
+      <div class="hole" id="hole4">
+        <div class="mole"></div>
+      </div>
+      <div class="hole" id="hole5">
+        <div class="mole"></div>
+      </div>
+      <div class="hole" id="hole6">
+        <div class="mole"></div>
+      </div>
+    </div>
+    <p>游戏说明：你需要用鼠标打地鼠，到达5分即可成功；</p>
+    <script>
+      //获取所有地鼠洞
+      const holes = document.querySelectorAll(".hole");
+      //获取所有地鼠
+      const moles = document.querySelectorAll(".mole");
+      //获取得分
+      const scoreBoard = document.querySelector(".score");
+
+      let time = 800; //地鼠出现时间
+
+      let score = 0; //得分
+
+      //变速函数
+      function gameSpeed1() {
+        time = 800;
+        document.getElementById("dengji").innerHTML = "当前难度等级：简单的";
+      }
+      function gameSpeed2() {
+        time = 600;
+        document.getElementById("dengji").innerHTML = "当前难度等级：还可以";
+      }
+      function gameSpeed3() {
+        time = 300;
+        document.getElementById("dengji").innerHTML = "当前难度等级：地狱级";
+      }
+
+      //随机数封装
+      function getRandom(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+      }
+
+      //游戏开始
+      function startGame() {
+        //随机下标[0,6)
+        const index = getRandom(0, holes.length);
+        console.log(index);
+        //随机出现一个地鼠
+        holes[index].classList.add("up");
+        moles[index].classList.add("click");
+        setTimeout(() => {
+          holes[index].classList.remove("up");
+          moles[index].classList.remove("click");
+        }, time);
+        console.log(time);
+        if (time == 800) {
+          document.getElementById("dengji").innerHTML = "当前难度等级：简单的";
+        }
+        if (time == 600) {
+          document.getElementById("dengji").innerHTML = "当前难度等级：还可以";
+        }
+        if (time == 300) {
+          document.getElementById("dengji").innerHTML = "当前难度等级：地狱级";
+        }
+      }
+
+      //打地鼠
+      game.addEventListener("click", function (e) {
+        console.log(e.target.className);
+        //是否点击的地鼠
+        if (e.target.className == "mole click") {
+          console.log("zhe");
+          score++;
+          scoreBoard.innerHTML = score;
+        }
+        startGame();
+        if (score > 4) {
+          document.getElementById("gongXi").innerHTML =
+            "恭喜你，挑战成功了，真是个眼疾手快的小精灵！";
+          scoreBoard.innerHTML = 5;
+          setTimeout(() => {
+            score = 0;
+            scoreBoard.innerHTML = score;
+            document.getElementById("gongXi").innerHTML = "";
+          }, 5000);
+        }
+      });
+    </script>
+  </body>
+</html>
